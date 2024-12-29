@@ -4,33 +4,30 @@ import uploadPdf from "@/services/upload-pdf";
 import { useRef } from "react";
 import { toast } from "sonner";
 
-const FileUpload = ({ selectedFile, setSelectedFile }) => {
+const FileUpload = ({ setSelectedFile }) => {
   const documentUploaded = useRef(false);
 
-  const handleUpload = async () => {
-    if (!documentUploaded.current) {
-      toast.error("No file selected.");
-      return;
-    }
-    try {
-      await uploadPdf(selectedFile).then((response) => {
-        if (response.status === 200) {
-          toast.success("File uploaded successfully!");
-        } else {
-          toast.error("File upload failed.");
-        }
-      });
-    } catch (error) {
-      toast.error(error.toString());
-    }
-  };
-
+  /*
+   * Custom React component to upload a file. We restrict the file type to PDFs only.
+   * Every error is handled and shown as a toast notification.
+   * The file is uploaded to the server using the uploadPdf service.
+   * */
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file && file.type === "application/pdf") {
       setSelectedFile(file);
       documentUploaded.current = true;
-      await handleUpload();
+
+      try {
+        const response = await uploadPdf(file);
+        if (response.status === 201) {
+          toast.success("File uploaded successfully!");
+        } else {
+          toast.error("File upload failed.");
+        }
+      } catch (error) {
+        toast.error(error.toString());
+      }
     } else {
       toast.warning("Please select a valid PDF file.");
     }
@@ -58,6 +55,5 @@ const FileUpload = ({ selectedFile, setSelectedFile }) => {
 export default FileUpload;
 
 FileUpload.propTypes = {
-  selectedFile: PropTypes.object,
   setSelectedFile: PropTypes.func,
 };

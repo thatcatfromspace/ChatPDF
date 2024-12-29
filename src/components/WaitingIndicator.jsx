@@ -1,15 +1,12 @@
-import { motion } from "framer-motion";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 function WaitingIndicator() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="px-10"
-    >
-      <span className="text-sm">Waiting for response...</span>
-    </motion.div>
+    <SkeletonTheme baseColor="#202020" highlightColor="#444">
+      <p>
+        <Skeleton count={3} />
+      </p>
+    </SkeletonTheme>
   );
 }
 

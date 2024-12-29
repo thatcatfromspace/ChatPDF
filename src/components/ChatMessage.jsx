@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Markdown from "react-markdown";
+import MarkdownRenderer from "@/components/MarkdownRenderer.jsx";
 
 const ChatMessage = ({ imageSrc, username, messageText }) => {
   return (
@@ -15,7 +15,7 @@ const ChatMessage = ({ imageSrc, username, messageText }) => {
           className="mt-4 h-8 w-8 rounded-full object-cover"
         />
         <div className="mt-5 text-sm">
-          <Markdown>{messageText}</Markdown>
+          <MarkdownRenderer markdownText={messageText} />
         </div>
       </div>
     </motion.div>

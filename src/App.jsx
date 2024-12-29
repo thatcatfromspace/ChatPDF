@@ -82,7 +82,7 @@ function App() {
   return (
     <>
       <nav className="fixed z-10 w-full bg-white">
-        <div className="flex h-14 w-full items-center justify-between px-5 shadow-md sm:h-16 sm:px-10">
+        <div className="flex h-14 w-full min-w-fit items-center justify-between px-5 shadow-md sm:h-16 sm:px-10">
           <img src="/ai-planet-logo.svg" alt="AI Planet Logo" />
           <div className="flex items-center justify-between space-x-7 align-middle">
             {file && (
@@ -98,7 +98,7 @@ function App() {
               </div>
             )}
             <div>
-              <FileUpload selectedFile={file} setSelectedFile={setFile} />
+              <FileUpload setSelectedFile={setFile} />
             </div>
           </div>
         </div>
@@ -122,7 +122,7 @@ function App() {
         {isWaiting && <WaitingIndicator />}
         <div className="invisible h-24 min-h-24">lorem19</div>
         <div className="fixed bottom-6 right-2 z-10 flex w-[99%] justify-center px-5 sm:right-8 sm:px-48">
-          <div className="border-chat-4 chat-box flex h-10 w-full min-w-[80%] items-center rounded-lg border-chat bg-chat px-5">
+          <div className="border-chat-4 chat-box flex h-10 w-full min-w-[80%] items-center rounded-md border-chat bg-chat px-5">
             <input
               ref={inputRef}
               className="w-full overflow-y-scroll bg-chat text-sm outline-none"
