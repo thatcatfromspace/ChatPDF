@@ -1,12 +1,15 @@
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function WaitingIndicator() {
   return (
-    <SkeletonTheme baseColor="#202020" highlightColor="#444">
-      <p>
-        <Skeleton count={3} />
-      </p>
-    </SkeletonTheme>
+    <div className="w-full px-11">
+      <SkeletonTheme>
+        <p>
+          <Skeleton count={3} />
+        </p>
+      </SkeletonTheme>
+    </div>
   );
 }
 

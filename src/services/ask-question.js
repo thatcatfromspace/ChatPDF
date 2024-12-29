@@ -3,7 +3,7 @@ import axios from "axios";
 const askQuestion = async (question) => {
   try {
     const response = await axios.post(
-      "http://localhost:8000/ask_question/",
+      "http://192.168.1.36:8000/ask_question/",
       question,
       {
         headers: {
@@ -18,7 +18,7 @@ const askQuestion = async (question) => {
       return "Question submission failed";
     }
   } catch (error) {
-    return error.toString();
+    return "Something went wrong. Please try again.";
   }
 };
 

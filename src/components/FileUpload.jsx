@@ -26,7 +26,7 @@ const FileUpload = ({ setSelectedFile }) => {
           toast.error("File upload failed.");
         }
       } catch (error) {
-        toast.error(error.toString());
+        toast.error("Something went wrong. Please try again.");
       }
     } else {
       toast.warning("Please select a valid PDF file.");

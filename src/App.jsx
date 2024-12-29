@@ -103,8 +103,8 @@ function App() {
           </div>
         </div>
       </nav>
-      <main className="sm:min-h-[calc(100vh-56px] relative flex min-h-[calc(100vh-64px)] w-full flex-col space-y-8 px-5 py-5 pt-20 sm:px-20">
-        <motion.div>
+      <main className="sm:min-h-[calc(100vh-56px] relative flex min-h-[calc(100vh-64px)] w-full flex-col space-y-5 px-8 py-5 pt-20 sm:px-20">
+        <motion.div className="space-y-5">
           {currentChat.map((chatMessage, index) => (
             <ChatMessage
               messageText={chatMessage.content}
@@ -121,7 +121,7 @@ function App() {
         </motion.div>
         {isWaiting && <WaitingIndicator />}
         <div className="invisible h-24 min-h-24">lorem19</div>
-        <div className="fixed bottom-6 right-2 z-10 flex w-[99%] justify-center px-5 sm:right-8 sm:px-48">
+        <div className="xl:48 fixed bottom-6 right-2 z-10 flex w-[99vw] justify-center px-5 sm:right-8 sm:px-24 md:px-36">
           <div className="border-chat-4 chat-box flex h-10 w-full min-w-[80%] items-center rounded-md border-chat bg-chat px-5">
             <input
               ref={inputRef}
