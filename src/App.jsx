@@ -18,7 +18,9 @@ import "./App.css";
 function App() {
   const [file, setFile] = useState(null);
   const [prompt, setPrompt] = useState("");
-  const [currentChat, setCurrentChat] = useState([]);
+  const [currentChat, setCurrentChat] = useState([
+    { author: "bot", content: "Hello! How can I help you today?" },
+  ]);
   const [isWaiting, setIsWaiting] = useState(false);
   const waitingForReply = useRef(false);
 
@@ -130,6 +132,7 @@ function App() {
               onChange={handleTextChange}
               onKeyDown={handleKeyPress}
               disabled={waitingForReply.current}
+              autoFocus
             />
             <SendHorizonal
               stroke={"#c4c5ce"}
