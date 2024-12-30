@@ -1,9 +1,11 @@
 import axios from "axios";
 
 const askQuestion = async (question) => {
+  const BACKEND_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+
   try {
     const response = await axios.post(
-      "http://localhost:8000/ask_question/",
+      `${BACKEND_URL}/ask_question/`,
       question,
       {
         headers: {

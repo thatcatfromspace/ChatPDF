@@ -1,10 +1,13 @@
 import axios from "axios";
 
 const uploadPdf = async (file) => {
+  const BACKEND_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+
   const data = new FormData();
   data.append("file", file);
+
   await axios
-    .post("http://localhost:8000/upload_pdf/", data, {
+    .post(`${BACKEND_URL}/upload_pdf/`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
