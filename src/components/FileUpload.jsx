@@ -4,7 +4,7 @@ import uploadPdf from "@/services/upload-pdf";
 import { useRef } from "react";
 import { toast } from "sonner";
 
-const FileUpload = ({ setSelectedFile }) => {
+const FileUpload = ({ selectedFileSetter, fileUploadStateSetter }) => {
   const documentUploaded = useRef(false);
 
   /*
@@ -15,18 +15,22 @@ const FileUpload = ({ setSelectedFile }) => {
   const handleFileChange = async (event) => {
     const file = event.target.files[0]; // upload the first available file
     if (file && file.type === "application/pdf") {
-      setSelectedFile(file);
+      selectedFileSetter(file);
       documentUploaded.current = true;
 
       try {
-        const response = await uploadPdf(file);
-        if (response.status === 201) {
-          toast.success("File uploaded successfully!");
-        } else {
-          toast.error("File upload failed.");
-        }
+        uploadPdf(file).then((response) => {
+          if (response.includes("successful")) {
+            toast.success("File uploaded successfully!");
+            fileUploadStateSetter("#0FA958");
+          } else {
+            toast.error("File upload failed.");
+            fileUploadStateSetter("#ab2525");
+          }
+        });
       } catch (error) {
         toast.error("Something went wrong. Please try again.");
+        fileUploadStateSetter("#ab2525");
       }
     } else {
       toast.warning("Please select a valid PDF file.");
@@ -55,5 +59,7 @@ const FileUpload = ({ setSelectedFile }) => {
 export default FileUpload;
 
 FileUpload.propTypes = {
-  setSelectedFile: PropTypes.func,
+  selectedFileSetter: PropTypes.func,
+  fileState: PropTypes.object,
+  fileUploadStateSetter: PropTypes.func,
 };

@@ -21,7 +21,8 @@ function App() {
   const [currentChat, setCurrentChat] = useState([
     { author: "bot", content: "Hello! How can I help you today?" },
   ]);
-  const [isWaiting, setIsWaiting] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false); // to show the waiting skeleton
+  const [fileUploadState, setFileUploadState] = useState("yellow");
   const waitingForReply = useRef(false);
 
   // Ref to track the last message
@@ -90,18 +91,27 @@ function App() {
           <div className="flex items-center justify-between space-x-7 align-middle">
             {file && (
               <div className="flex items-center space-x-2">
-                <div className="rounded-md border border-primary/50 p-1">
-                  <File size={20} strokeWidth={1.5} color={"#0FA958"} />
+                <div
+                  className="rounded-md border p-1"
+                  style={{ borderColor: fileUploadState }} // dynamic Tailwind classes are not encouraged!
+                >
+                  <File size={20} strokeWidth={1.5} color={fileUploadState} />
                 </div>
                 <div>
-                  <span className="hidden text-sm text-primary sm:flex">
+                  <span
+                    className="hidden text-sm sm:flex"
+                    style={{ color: fileUploadState }}
+                  >
                     {file.name}
                   </span>
                 </div>
               </div>
             )}
             <div>
-              <FileUpload setSelectedFile={setFile} />
+              <FileUpload
+                selectedFileSetter={setFile}
+                fileUploadStateSetter={setFileUploadState}
+              />
             </div>
           </div>
         </div>

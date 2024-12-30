@@ -7,16 +7,17 @@ const uploadPdf = async (file) => {
   data.append("file", file);
 
   await axios
-    .post(`${BACKEND_URL}/upload_pdf/`, data, {
+    .post(`${BACKEND_URL}/api/upload_pdf/`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
     .then((response) => {
-      if (response.status === 201) {
-        return response;
+      if (response.status === 200) {
+        return response.data.message;
       } else return "File upload failed";
     });
+  return "File upload successful.";
 };
 
 export default uploadPdf;

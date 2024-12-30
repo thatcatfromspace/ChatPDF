@@ -5,7 +5,7 @@ const askQuestion = async (question) => {
 
   try {
     const response = await axios.post(
-      `${BACKEND_URL}/ask_question/`,
+      `${BACKEND_URL}/api/ask_question/`,
       question,
       {
         headers: {
