@@ -4,7 +4,7 @@ const uploadPdf = async (file) => {
   const data = new FormData();
   data.append("file", file);
   await axios
-    .post("http://192.168.1.36:8000/upload_pdf/", data, {
+    .post("http://localhost:8000/upload_pdf/", data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

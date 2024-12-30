@@ -25,7 +25,7 @@ function App() {
   const waitingForReply = useRef(false);
 
   // Ref to track the last message
-  const messagesEndRef = useRef(null);
+  const chatEnd = useRef(null);
 
   // Ref to access the input field
   const inputRef = useRef(null);
@@ -75,9 +75,10 @@ function App() {
     setPrompt(event.target.value);
   };
 
+  /* Scroll to the bottom of the reference div at the end of every new chat */
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (chatEnd.current) {
+      chatEnd.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [currentChat]);
 
@@ -119,7 +120,7 @@ function App() {
               key={index}
             />
           ))}
-          <div ref={messagesEndRef} />
+          <div ref={chatEnd} />
         </motion.div>
         {isWaiting && <WaitingIndicator />}
         <div className="invisible h-24 min-h-24">lorem19</div>

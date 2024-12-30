@@ -3,7 +3,7 @@ import axios from "axios";
 const askQuestion = async (question) => {
   try {
     const response = await axios.post(
-      "http://192.168.1.36:8000/ask_question/",
+      "http://localhost:8000/ask_question/",
       question,
       {
         headers: {

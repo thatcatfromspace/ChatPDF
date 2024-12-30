@@ -13,7 +13,7 @@ const FileUpload = ({ setSelectedFile }) => {
    * The file is uploaded to the server using the uploadPdf service.
    * */
   const handleFileChange = async (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]; // upload the first available file
     if (file && file.type === "application/pdf") {
       setSelectedFile(file);
       documentUploaded.current = true;
