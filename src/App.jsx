@@ -25,11 +25,12 @@ function App() {
     { author: "bot", content: "Hello! How can I help you today?" },
   ]);
   const [isWaiting, setIsWaiting] = useState(false); // to show the waiting skeleton
-  const [userFiles, setUserFiles] = useState(["file1", "file2", "file3"]);
+  const [userFiles, setUserFiles] = useState(null);
   const [contextFile, setContextFile] = useState("");
+  const [showFileSelectMessage, setShowFileSelectMessage] = useState(false);
   const [fileUploadState, setFileUploadState] = useState("#FFAA33");
   const waitingForReply = useRef(false);
-  const newFileUploaded = useRef(false); // to keep track of new file being uploaded 
+  const newFileUploaded = useRef(false); // to keep track of new file being uploaded
 
   // Ref to track the last message
   const chatEnd = useRef(null);
@@ -43,6 +44,10 @@ function App() {
     const inputValue = fromMouse ? prompt : event.target.value;
 
     if (fromMouse || event.key === "Enter") {
+      if (!contextFile) {
+        toast.error("Please upload a file first.");
+        return;
+      }
       if (inputValue.trim()) {
         setCurrentChat([
           ...currentChat,
@@ -58,7 +63,7 @@ function App() {
 
         try {
           const req = { question: inputValue };
-          const response = await askQuestion(req);
+          const response = await askQuestion(req, contextFile.name);
           if (typeof response === "string") {
             toast.error(response || "Something went wrong. Please try again.");
           }
@@ -98,23 +103,23 @@ function App() {
   }, []);
 
   const fetchFiles = async () => {
-    const serverFiles = await allFiles();
-    if (typeof serverFiles === "string") {
-      return toast.error(serverFiles);
-    } else {
-      if (serverFiles.files.length > 1) {
-        setUserFiles(serverFiles);
+    await allFiles().then((serverFiles) => {
+      if (typeof serverFiles === "string") {
+        return toast.error(serverFiles);
+      } else {
+        if (serverFiles.files.length > 1) {
+          setUserFiles(serverFiles.files);
+        }
       }
-    }
+    });
   };
 
   /* Since useEffect callback cannot be async */
   useEffect(() => {
-    // fetchFiles();
+    fetchFiles();
   }, [file]);
 
-
-  const FileSelectMessage = () => {
+  const FileSelectMessage = () => (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -126,21 +131,32 @@ function App() {
           alt={"bot profile"}
           className="mt-4 h-8 w-8 rounded-full object-cover"
         />
-        <div className="mt-5 text-sm flex flex-col space-y-4">
+        <div className="mt-5 flex flex-col space-y-4 text-sm">
           <div>
-            {"It looks like you've uploaded more than one file. Which file would you like me to generate responses from?"}
-          </div>
-          <Dropdown label="Select a file" inline>
             {
-              userFiles.map((idx, file) => (
-                <Dropdown.Item key={idx} onClick={() => { setContextFile(file); console.log(file); }}>{file}</Dropdown.Item>
-              ))
+              "It looks like you've uploaded more than one file. Which file would you like me to generate responses from?"
             }
-          </Dropdown>
+          </div>
+          <div className="w-fit max-w-fit">
+            <Dropdown label="Select a file" className="w-14" inline>
+              {userFiles.map((file, idx) => (
+                <Dropdown.Item
+                  key={idx}
+                  onClick={() => {
+                    setContextFile(file);
+                    setShowFileSelectMessage(false);
+                    setIsWaiting(true);
+                  }}
+                >
+                  {file}
+                </Dropdown.Item>
+              ))}
+            </Dropdown>
+          </div>
         </div>
       </div>
     </motion.div>
-  }
+  );
 
   return (
     <>
@@ -168,9 +184,10 @@ function App() {
             )}
             <div>
               <FileUpload
-                selectedFileSetter={setFile}
                 fileUploadStateSetter={setFileUploadState}
                 newFileUploaded={newFileUploaded}
+                contextFileSetter={setContextFile}
+                fileSetter={setFile}
               />
             </div>
           </div>
@@ -193,10 +210,9 @@ function App() {
 
           <div ref={chatEnd} />
         </motion.div>
-        {isWaiting && <WaitingIndicator />}
+        {showFileSelectMessage && <FileSelectMessage />}
+        {isWaiting && !showFileSelectMessage && <WaitingIndicator />}
         <div className="invisible h-24 min-h-24">lorem19</div>
-        <FileSelectMessage />
-        
         <div className="xl:48 fixed bottom-6 right-2 z-10 flex w-[99vw] justify-center px-5 sm:right-8 sm:px-24 md:px-36">
           <div className="border-chat-4 chat-box flex h-10 w-full min-w-[80%] items-center rounded-md border-chat bg-chat px-5">
             <input

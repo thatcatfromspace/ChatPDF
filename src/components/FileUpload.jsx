@@ -4,7 +4,11 @@ import uploadPdf from "@/services/upload-pdf";
 import { useRef } from "react";
 import { toast } from "sonner";
 
-const FileUpload = ({ selectedFileSetter, fileUploadStateSetter, newFileUploaded }) => {
+const FileUpload = ({
+  fileUploadStateSetter,
+  contextFileSetter,
+  fileSetter,
+}) => {
   const documentUploaded = useRef(false);
 
   /*
@@ -15,7 +19,8 @@ const FileUpload = ({ selectedFileSetter, fileUploadStateSetter, newFileUploaded
   const handleFileChange = async (event) => {
     const file = event.target.files[event.target.files.length - 1]; // upload the latest uploaded file
     if (file && file.type === "application/pdf") {
-      selectedFileSetter(file);
+      fileSetter(file);
+      contextFileSetter(file);
       documentUploaded.current = true;
 
       try {
@@ -24,7 +29,6 @@ const FileUpload = ({ selectedFileSetter, fileUploadStateSetter, newFileUploaded
             toast.success(
               "File uploaded successfully! However, it might take a while for the server to process your file."
             );
-            newFileUploaded.current = true;
             fileUploadStateSetter("#0FA958");
           } else {
             toast.error("File upload failed.");
@@ -62,7 +66,7 @@ const FileUpload = ({ selectedFileSetter, fileUploadStateSetter, newFileUploaded
 export default FileUpload;
 
 FileUpload.propTypes = {
-  selectedFileSetter: PropTypes.func.isRequired,
-  fileState: PropTypes.object.isRequired,
   fileUploadStateSetter: PropTypes.func.isRequired,
+  contextFileSetter: PropTypes.func.isRequired,
+  fileSetter: PropTypes.func.isRequired,
 };

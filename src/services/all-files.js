@@ -10,7 +10,7 @@ const allFiles = async () => {
 
   try {
     await axios
-      .get(`${BACKEND_URL}/api/all_files/?user_id=${userId}`)
+      .get(`${BACKEND_URL}/api/get_files/?user_id=${userId}`)
       .then((response) => {
         if (response.status === 200) {
           return response.data;
