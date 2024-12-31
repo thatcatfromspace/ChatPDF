@@ -13,6 +13,7 @@ import { File, SendHorizonal } from "lucide-react";
 import FileUpload from "@/components/FileUpload";
 import WaitingIndicator from "@/components/WaitingIndicator";
 import { Toaster, toast } from "sonner";
+import { Dropdown } from "flowbite-react";
 
 /* stylesheets */
 import "./App.css";
@@ -24,9 +25,11 @@ function App() {
     { author: "bot", content: "Hello! How can I help you today?" },
   ]);
   const [isWaiting, setIsWaiting] = useState(false); // to show the waiting skeleton
-  const [userFiles, setUserFiles] = useState([]);
-  const [fileUploadState, setFileUploadState] = useState("yellow");
+  const [userFiles, setUserFiles] = useState(["file1", "file2", "file3"]);
+  const [contextFile, setContextFile] = useState("");
+  const [fileUploadState, setFileUploadState] = useState("#FFAA33");
   const waitingForReply = useRef(false);
+  const newFileUploaded = useRef(false); // to keep track of new file being uploaded 
 
   // Ref to track the last message
   const chatEnd = useRef(null);
@@ -100,12 +103,45 @@ function App() {
       return toast.error(serverFiles);
     } else {
       if (serverFiles.files.length > 1) {
-        setUserFiles(() => setUserFiles([...serverFiles]));
+        setUserFiles(serverFiles);
       }
     }
   };
 
-  useEffect(() => {}, []);
+  /* Since useEffect callback cannot be async */
+  useEffect(() => {
+    // fetchFiles();
+  }, [file]);
+
+
+  const FileSelectMessage = () => {
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="flex items-start space-x-4">
+        <img
+          src="/ai-planet-logo-min.png"
+          alt={"bot profile"}
+          className="mt-4 h-8 w-8 rounded-full object-cover"
+        />
+        <div className="mt-5 text-sm flex flex-col space-y-4">
+          <div>
+            {"It looks like you've uploaded more than one file. Which file would you like me to generate responses from?"}
+          </div>
+          <Dropdown label="Select a file" inline>
+            {
+              userFiles.map((idx, file) => (
+                <Dropdown.Item key={idx} onClick={() => { setContextFile(file); console.log(file); }}>{file}</Dropdown.Item>
+              ))
+            }
+          </Dropdown>
+        </div>
+      </div>
+    </motion.div>
+  }
+
   return (
     <>
       <nav className="fixed z-10 w-full bg-white">
@@ -134,6 +170,7 @@ function App() {
               <FileUpload
                 selectedFileSetter={setFile}
                 fileUploadStateSetter={setFileUploadState}
+                newFileUploaded={newFileUploaded}
               />
             </div>
           </div>
@@ -153,10 +190,13 @@ function App() {
               key={index}
             />
           ))}
+
           <div ref={chatEnd} />
         </motion.div>
         {isWaiting && <WaitingIndicator />}
         <div className="invisible h-24 min-h-24">lorem19</div>
+        <FileSelectMessage />
+        
         <div className="xl:48 fixed bottom-6 right-2 z-10 flex w-[99vw] justify-center px-5 sm:right-8 sm:px-24 md:px-36">
           <div className="border-chat-4 chat-box flex h-10 w-full min-w-[80%] items-center rounded-md border-chat bg-chat px-5">
             <input

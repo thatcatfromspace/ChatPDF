@@ -10,12 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@bytescale/upload-widget": "^4.27.0",
     "@bytescale/upload-widget-react": "^4.19.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "flowbite-react": "^0.10.2",
     "framer-motion": "^11.15.0",
     "jotai": "^2.11.0",
     "lucide-react": "^0.469.0",

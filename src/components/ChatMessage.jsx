@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import MarkdownRenderer from "@/components/MarkdownRenderer.jsx";
+import PropTypes from "prop-types";
 
 const ChatMessage = ({ imageSrc, username, messageText }) => {
   return (
@@ -11,7 +12,7 @@ const ChatMessage = ({ imageSrc, username, messageText }) => {
       <div className="flex items-start space-x-4">
         <img
           src={imageSrc}
-          alt={`${username}'s avatar`}
+          alt={`${username} profile`}
           className="mt-4 h-8 w-8 rounded-full object-cover"
         />
         <div className="mt-5 text-sm">
@@ -23,3 +24,9 @@ const ChatMessage = ({ imageSrc, username, messageText }) => {
 };
 
 export default ChatMessage;
+
+ChatMessage.propTypes = {
+  imageSrc: PropTypes.string.isRequired,
+  username: PropTypes.string,
+  messageText: PropTypes.string.isRequired
+}
