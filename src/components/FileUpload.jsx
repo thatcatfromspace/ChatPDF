@@ -13,7 +13,7 @@ const FileUpload = ({ selectedFileSetter, fileUploadStateSetter }) => {
    * The file is uploaded to the server using the uploadPdf service.
    * */
   const handleFileChange = async (event) => {
-    const file = event.target.files[0]; // upload the first available file
+    const file = event.target.files[event.target.files.length - 1]; // upload the latest uploaded file
     if (file && file.type === "application/pdf") {
       selectedFileSetter(file);
       documentUploaded.current = true;
@@ -21,7 +21,9 @@ const FileUpload = ({ selectedFileSetter, fileUploadStateSetter }) => {
       try {
         uploadPdf(file).then((response) => {
           if (response.includes("successful")) {
-            toast.success("File uploaded successfully!");
+            toast.success(
+              "File uploaded successfully! However, it might take a while for the server to process your file."
+            );
             fileUploadStateSetter("#0FA958");
           } else {
             toast.error("File upload failed.");

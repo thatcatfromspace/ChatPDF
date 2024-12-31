@@ -1,9 +1,11 @@
 /* library imports */
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { v4 as uuid } from "uuid";
 
 /* services */
 import askQuestion from "@/services/ask-question";
+import allFiles from "@/services/all-files";
 
 /* component imports */
 import ChatMessage from "@/components/ChatMessage";
@@ -22,6 +24,7 @@ function App() {
     { author: "bot", content: "Hello! How can I help you today?" },
   ]);
   const [isWaiting, setIsWaiting] = useState(false); // to show the waiting skeleton
+  const [userFiles, setUserFiles] = useState([]);
   const [fileUploadState, setFileUploadState] = useState("yellow");
   const waitingForReply = useRef(false);
 
@@ -83,6 +86,26 @@ function App() {
     }
   }, [currentChat]);
 
+  /* Since we haven't done auth, implement a basic identity service using uuid */
+  useEffect(() => {
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      localStorage.setItem("user_id", uuid());
+    }
+  }, []);
+
+  const fetchFiles = async () => {
+    const serverFiles = await allFiles();
+    if (typeof serverFiles === "string") {
+      return toast.error(serverFiles);
+    } else {
+      if (serverFiles.files.length > 1) {
+        setUserFiles(() => setUserFiles([...serverFiles]));
+      }
+    }
+  };
+
+  useEffect(() => {}, []);
   return (
     <>
       <nav className="fixed z-10 w-full bg-white">

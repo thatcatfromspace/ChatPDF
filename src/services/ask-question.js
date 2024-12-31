@@ -2,10 +2,11 @@ import axios from "axios";
 
 const askQuestion = async (question) => {
   const BACKEND_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+  const userId = localStorage.getItem("user_id");
 
   try {
     const response = await axios.post(
-      `${BACKEND_URL}/api/ask_question/`,
+      `${BACKEND_URL}/api/ask_question/?user_id=${userId}`,
       question,
       {
         headers: {

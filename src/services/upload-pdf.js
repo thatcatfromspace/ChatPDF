@@ -2,12 +2,13 @@ import axios from "axios";
 
 const uploadPdf = async (file) => {
   const BACKEND_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+  const userId = localStorage.getItem("user_id");
 
   const data = new FormData();
   data.append("file", file);
 
   await axios
-    .post(`${BACKEND_URL}/api/upload_pdf/`, data, {
+    .post(`${BACKEND_URL}/api/upload_pdf/?user_id=${userId}`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
