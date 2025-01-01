@@ -3,6 +3,8 @@
 This project is a React-based web application that allows users to upload PDF files and interact with a chatbot. The
 application uses several components and libraries to provide a seamless user experience.
 
+**A live demo is available at [https://ai-planet-chatbot.vercel.app](https://ai-planet-chatbot.vercel.app).**
+
 ### Key Components
 
 1. **App.jsx**: The main component that manages the overall application state and layout.
