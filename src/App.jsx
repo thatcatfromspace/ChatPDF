@@ -46,6 +46,7 @@ function App() {
     if (fromMouse || event.key === "Enter") {
       if (!contextFile) {
         toast.error("Please upload a file first.");
+        inputRef.current.value = "";
         return;
       }
       if (inputValue.trim()) {
