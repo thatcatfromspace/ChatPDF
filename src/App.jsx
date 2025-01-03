@@ -59,7 +59,6 @@ function App() {
 
       if (contextFileProcessingState === PROCESSING) {
         toast.warning("Your file is still processing. Please wait.");
-        inputRef.current.value = "";
         return;
       }
 
