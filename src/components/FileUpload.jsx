@@ -27,7 +27,7 @@ const FileUpload = ({
         uploadPdf(file).then((response) => {
           if (response.includes("successful")) {
             toast.success(
-              "File uploaded successfully! However, it might take a while for the server to process your file."
+              "File uploaded successfully and queued for processing."
             );
             fileUploadStateSetter("#0FA958");
           } else {
@@ -35,6 +35,7 @@ const FileUpload = ({
             fileUploadStateSetter("#ab2525");
           }
         });
+        // eslint-disable-next-line no-unused-vars
       } catch (error) {
         toast.error("Something went wrong. Please try again.");
         fileUploadStateSetter("#ab2525");

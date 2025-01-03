@@ -18,8 +18,11 @@ const askQuestion = async (question, file) => {
     if (response.status === 200) {
       return response.data;
     } else {
-      return "Question submission failed";
+      if (response.data.message.includes("uploaded.")) {
+        return "Your file is still being processed, please wait for a while.";
+      }
     }
+    // eslint-disable-next-line no-unused-vars
   } catch (error) {
     return "Something went wrong. Please try again.";
   }

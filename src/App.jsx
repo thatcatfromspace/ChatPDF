@@ -17,6 +17,11 @@ import { Dropdown } from "flowbite-react";
 
 /* stylesheets */
 import "./App.css";
+import uploadStatus from "@/services/upload-status.js";
+
+/* Track file processing state */
+const PROCESSING = "processing";
+const COMPLETED = "completed";
 
 function App() {
   const [file, setFile] = useState(null);
@@ -29,6 +34,8 @@ function App() {
   const [contextFile, setContextFile] = useState("");
   const [showFileSelectMessage, setShowFileSelectMessage] = useState(false);
   const [fileUploadState, setFileUploadState] = useState("#FFAA33");
+  const [contextFileProcessingState, setContextFileProcessingState] =
+    useState("processing");
   const waitingForReply = useRef(false);
   const newFileUploaded = useRef(false); // to keep track of new file being uploaded
 
@@ -49,13 +56,19 @@ function App() {
         inputRef.current.value = "";
         return;
       }
+
+      if (contextFileProcessingState === PROCESSING) {
+        toast.error("Your file is still processing. Please wait.");
+        inputRef.current.value = "";
+        return;
+      }
+
       if (inputValue.trim()) {
         setCurrentChat([
           ...currentChat,
           { author: "Dinesh", content: inputValue },
         ]);
         setPrompt("");
-        // Clear the input field directly using the ref
         if (inputRef.current) {
           inputRef.current.value = "";
         }
@@ -66,7 +79,7 @@ function App() {
           const req = { question: inputValue };
           const response = await askQuestion(req, contextFile.name);
           if (typeof response === "string") {
-            toast.error(response || "Something went wrong. Please try again.");
+            toast.error(response ?? "Something went wrong. Please try again.");
           }
           const answer = response.answer;
           setCurrentChat((prevChat) => [
@@ -109,11 +122,30 @@ function App() {
         return toast.error(serverFiles);
       } else {
         if (serverFiles.files.length > 1) {
+          console.log(serverFiles.files);
           setUserFiles(serverFiles.files);
+          setShowFileSelectMessage(true);
         }
       }
     });
   };
+
+  useEffect(() => {
+    const pollStatus = async () => {
+      if (contextFile) {
+        const status = await uploadStatus(contextFile.name);
+        setContextFileProcessingState(status);
+        if (status === COMPLETED) {
+          clearInterval(interval);
+          toast.success("Your file has been processed!");
+        }
+      }
+    };
+
+    const interval = setInterval(pollStatus, 7000);
+
+    return () => clearInterval(interval);
+  }, [contextFile]);
 
   /* Since useEffect callback cannot be async */
   useEffect(() => {
@@ -175,7 +207,7 @@ function App() {
                 </div>
                 <div>
                   <span
-                    className="hidden text-sm sm:flex"
+                    className="hidden max-w-[300px] truncate text-sm sm:flex"
                     style={{ color: fileUploadState }}
                   >
                     {file.name}
