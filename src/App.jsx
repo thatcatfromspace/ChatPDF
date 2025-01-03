@@ -58,7 +58,7 @@ function App() {
       }
 
       if (contextFileProcessingState === PROCESSING) {
-        toast.error("Your file is still processing. Please wait.");
+        toast.warning("Your file is still processing. Please wait.");
         inputRef.current.value = "";
         return;
       }
@@ -122,7 +122,6 @@ function App() {
         return toast.error(serverFiles);
       } else {
         if (serverFiles.files.length > 1) {
-          console.log(serverFiles.files);
           setUserFiles(serverFiles.files);
           setShowFileSelectMessage(true);
         }
