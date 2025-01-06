@@ -11,8 +11,12 @@ application uses several components and libraries to provide a seamless user exp
 2. **FileUpload.jsx**: A component for uploading PDF files.
 3. **WaitingIndicator.jsx**: A component that displays a loading skeleton while waiting for a response from the server.
 4. **ChatMessage.jsx**: A component for individual chat messages, increasing modularity.
-5. **askQuestion**: A function (not provided in the excerpts) that sends a question to the server and retrieves the
-   response.
+
+ ### Services
+1. **askQuestion**: A function that sends a question to the server and retrieves the response, providing the corresponding user ID and file name.
+2. **uploadPdf**: Calls the endpoint to upload a file to the server with the PDF as payload.
+3. **uploadStatus**: Polls the backend for the file processing state.
+4. **allFiles**: Retrieves a list of files that the user has previously uploaded.
 
 ### Code Architecture
 
