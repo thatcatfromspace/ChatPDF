@@ -264,7 +264,7 @@ function App() {
             />
           </div>
         </div>
-        <Toaster position="top-right" richColors />
+        <Toaster position="top-right" richColors style={{ top: "50px" }} />
       </main>
     </>
   );
