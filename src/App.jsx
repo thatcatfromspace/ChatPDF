@@ -6,6 +6,7 @@ import { v4 as uuid } from "uuid";
 /* services */
 import askQuestion from "@/services/ask-question";
 import allFiles from "@/services/all-files";
+import responseStatus from "@/services/response-status";
 
 /* component imports */
 import ChatMessage from "@/components/ChatMessage";
@@ -35,7 +36,10 @@ function App() {
   const [showFileSelectMessage, setShowFileSelectMessage] = useState(false);
   const [fileUploadState, setFileUploadState] = useState("#FFAA33");
   const [contextFileProcessingState, setContextFileProcessingState] =
-    useState("processing");
+    useState(PROCESSING);
+  const [responseGenerationState, setResponseGenerationState] =
+    useState(PROCESSING);
+
   const waitingForReply = useRef(false);
   const newFileUploaded = useRef(false); // to keep track of new file being uploaded
 
@@ -80,17 +84,9 @@ function App() {
           if (typeof response === "string") {
             toast.error(response ?? "Something went wrong. Please try again.");
           }
-          const answer = response.answer;
-          setCurrentChat((prevChat) => [
-            ...prevChat,
-            { author: "bot", content: answer },
-          ]);
+          const answer = response.message;
         } catch (error) {
-          console.error("Error fetching response:", error);
           toast.error("Error fetching response. Please try again.");
-        } finally {
-          setIsWaiting(false);
-          waitingForReply.current = false;
         }
       }
     }
@@ -144,6 +140,29 @@ function App() {
 
     return () => clearInterval(interval);
   }, [contextFile]);
+
+  useEffect(() => {
+    const pollResponseStatus = async () => {
+      if (responseGenerationState === PROCESSING) {
+        const res = await responseStatus(contextFile.name);
+        const { response, status } = res;
+        setResponseGenerationState(status);
+        if (status === COMPLETED) {
+          clearInterval(intervalId);
+          setCurrentChat([
+            ...currentChat,
+            { author: "bot", content: response },
+          ]);
+          setIsWaiting(false);
+          waitingForReply.current = false;
+        }
+      }
+    };
+
+    const intervalId = setInterval(pollResponseStatus, 7000);
+
+    return () => clearInterval(intervalId);
+  }, [responseGenerationState, file]);
 
   /* Since useEffect callback cannot be async */
   useEffect(() => {
