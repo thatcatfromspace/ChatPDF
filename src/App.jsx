@@ -75,16 +75,20 @@ function App() {
         if (inputRef.current) {
           inputRef.current.value = "";
         }
+
         waitingForReply.current = true;
         setIsWaiting(true);
 
         try {
           const req = { question: inputValue };
+          setResponseGenerationState(PROCESSING); // Reset to trigger polling
           const response = await askQuestion(req, contextFile.name);
+
           if (typeof response === "string") {
             toast.error(response ?? "Something went wrong. Please try again.");
           }
-          const answer = response.message;
+
+          //eslint-disable-next-line
         } catch (error) {
           toast.error("Error fetching response. Please try again.");
         }
@@ -142,27 +146,28 @@ function App() {
   }, [contextFile]);
 
   useEffect(() => {
+    if (!contextFile || responseGenerationState !== PROCESSING) return;
+
     const pollResponseStatus = async () => {
-      if (responseGenerationState === PROCESSING) {
-        const res = await responseStatus(contextFile.name);
-        const { response, status } = res;
-        setResponseGenerationState(status);
-        if (status === COMPLETED) {
-          clearInterval(intervalId);
-          setCurrentChat([
-            ...currentChat,
-            { author: "bot", content: response },
-          ]);
-          setIsWaiting(false);
-          waitingForReply.current = false;
-        }
+      const res = await responseStatus(contextFile.name); // Backend call
+      const { response, status } = res;
+
+      if (status === COMPLETED) {
+        setResponseGenerationState(COMPLETED);
+        setCurrentChat((prevChat) => [
+          ...prevChat,
+          { author: "bot", content: response },
+        ]);
+        setIsWaiting(false);
+        waitingForReply.current = false;
+        clearInterval(intervalId);
       }
     };
 
     const intervalId = setInterval(pollResponseStatus, 7000);
 
     return () => clearInterval(intervalId);
-  }, [responseGenerationState, file]);
+  }, [contextFile, responseGenerationState]);
 
   /* Since useEffect callback cannot be async */
   useEffect(() => {
