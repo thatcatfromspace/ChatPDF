@@ -1,7 +1,7 @@
 ### Project Overview
 
 This project is a React-based web application that allows users to upload PDF files and interact with a chatbot. The
-application uses several components and libraries to provide a seamless user experience.
+application uses several components and libraries to provide a seamless user experience in conversation.
 
 **A live demo is available at [https://ai-planet-chatbot.vercel.app](https://ai-planet-chatbot.vercel.app)!**
 
@@ -12,8 +12,10 @@ application uses several components and libraries to provide a seamless user exp
 3. **WaitingIndicator.jsx**: A component that displays a loading skeleton while waiting for a response from the server.
 4. **ChatMessage.jsx**: A component for individual chat messages, increasing modularity.
 
- ### Services
-1. **askQuestion**: A function that sends a question to the server and retrieves the response, providing the corresponding user ID and file name.
+### Services
+
+1. **askQuestion**: A function that sends a question to the server and retrieves the response, providing the
+   corresponding user ID and file name.
 2. **uploadPdf**: Calls the endpoint to upload a file to the server with the PDF as payload.
 3. **uploadStatus**: Polls the backend for the file processing state.
 4. **allFiles**: Retrieves a list of files that the user has previously uploaded.
