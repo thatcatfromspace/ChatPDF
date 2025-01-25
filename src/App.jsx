@@ -217,7 +217,7 @@ function App() {
     <>
       <nav className="fixed z-10 w-full bg-white">
         <div className="flex h-14 w-full min-w-fit items-center justify-between px-5 shadow-md sm:h-16 sm:px-10">
-          <div className="flex space-x-3 items-center text-purple-600">
+          <div className="flex items-center space-x-3 text-purple-600">
             <img src="/robot.png" alt="AI Planet Logo" width={30} />
             <span className="text-lg font-bold">ChatPDF</span>
           </div>
@@ -231,12 +231,19 @@ function App() {
                   <File size={20} strokeWidth={1.5} color={fileUploadState} />
                 </div>
                 <div>
-                  <span
-                    className="hidden max-w-[300px] truncate text-sm sm:flex"
-                    style={{ color: fileUploadState }}
-                  >
-                    {file.name}
-                  </span>
+                  {fileUploadState === "#0FA958" &&
+                  contextFileProcessingState === PROCESSING ? (
+                    <span className="shimmer hidden max-w-[300px] truncate text-sm sm:flex">
+                      {file.name}
+                    </span>
+                  ) : (
+                    <span
+                      className="hidden max-w-[300px] truncate text-sm sm:flex"
+                      style={{ color: fileUploadState }}
+                    >
+                      {file.name}
+                    </span>
+                  )}
                 </div>
               </div>
             )}
@@ -256,11 +263,7 @@ function App() {
           {currentChat.map((chatMessage, index) => (
             <ChatMessage
               messageText={chatMessage.content}
-              imageSrc={
-                chatMessage.author === "bot"
-                  ? "/robot.png"
-                  : "cat.png"
-              }
+              imageSrc={chatMessage.author === "bot" ? "/robot.png" : "cat.png"}
               username={chatMessage.author}
               key={index}
             />

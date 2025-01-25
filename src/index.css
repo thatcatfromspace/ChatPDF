@@ -2,9 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
     .chat-box {
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .shimmer {
+        background: linear-gradient(to right, #A4D8B6 20%, #0FA958 50%, #A4D8B6 80%);
+        background-size: 200% auto;
+        color: transparent;
+        background-clip: text;
+        -webkit-background-clip: text;
+        animation: shimmer 4s linear infinite;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
     }
 }
