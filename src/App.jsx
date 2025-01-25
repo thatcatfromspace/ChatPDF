@@ -69,7 +69,7 @@ function App() {
       if (inputValue.trim()) {
         setCurrentChat([
           ...currentChat,
-          { author: "Dinesh", content: inputValue },
+          { author: "user", content: inputValue },
         ]);
         setPrompt("");
         if (inputRef.current) {
@@ -182,7 +182,7 @@ function App() {
     >
       <div className="flex items-start space-x-4">
         <img
-          src="/ai-planet-logo-min.png"
+          src="/bot.png"
           alt={"bot profile"}
           className="mt-4 h-8 w-8 rounded-full object-cover"
         />
@@ -217,7 +217,10 @@ function App() {
     <>
       <nav className="fixed z-10 w-full bg-white">
         <div className="flex h-14 w-full min-w-fit items-center justify-between px-5 shadow-md sm:h-16 sm:px-10">
-          <img src="/ai-planet-logo.svg" alt="AI Planet Logo" />
+          <div className="flex space-x-3 items-center text-purple-600">
+            <img src="/robot.png" alt="AI Planet Logo" width={30} />
+            <span className="text-lg font-bold">ChatPDF</span>
+          </div>
           <div className="flex items-center justify-between space-x-7 align-middle">
             {file && (
               <div className="flex items-center space-x-2">
@@ -255,7 +258,7 @@ function App() {
               messageText={chatMessage.content}
               imageSrc={
                 chatMessage.author === "bot"
-                  ? "/ai-planet-logo-min.png"
+                  ? "/robot.png"
                   : "cat.png"
               }
               username={chatMessage.author}
@@ -269,10 +272,10 @@ function App() {
         {isWaiting && !showFileSelectMessage && <WaitingIndicator />}
         <div className="invisible h-24 min-h-24">lorem19</div>
         <div className="xl:48 fixed bottom-6 right-2 z-10 flex w-[99vw] justify-center px-5 sm:right-8 sm:px-24 md:px-36">
-          <div className="border-chat-4 chat-box flex h-10 w-full min-w-[80%] items-center rounded-md border-chat bg-chat px-5">
+          <div className="border-chat-4 chat-box flex h-10 w-full min-w-[80%] items-center rounded-md border-purple-100 bg-purple-100 px-5">
             <input
               ref={inputRef}
-              className="w-full overflow-y-scroll bg-chat text-sm outline-none"
+              className="w-full overflow-y-scroll bg-purple-100 text-sm outline-none"
               placeholder="Send a message..."
               onChange={handleTextChange}
               onKeyDown={handleKeyPress}
